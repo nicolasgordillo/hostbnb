@@ -1,23 +1,21 @@
+import path from 'path';
 import express from 'express';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
 import App from './components/App';
+import App from './components/Html';
 
 const server = express();
 const port = process.env.PORT || 3000;
 server.get('*', (req, res) => {
-    const title = 'HostBNB';
-    const app = ReactDOM.renderToString(<App />);
+    const body = ReactDOM.renderToString(<App />);
+    const html = ReactDOM.renderToStaticMarkup(
+        <html title='HostBNB'
+         description="AirBNB clone for learning purposes"
+         body={body} />
+    );
     res.send(
-        `<doctype html>
-        <head>
-            <title>${title}</title>
-            <src script="client.js"></script>
-        </head>
-        <body>
-            <div id="app">${app}</div>
-        </body>
-        </html>`);
+        '<doctype html>\n' + html);
 });
 
 server.listen(port, () => {
